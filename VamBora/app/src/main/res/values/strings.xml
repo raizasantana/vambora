@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">VamBora</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="vb">VamBora!</string>
+
+    <!-- Facebook API -->
+    <string name="facebook_app_id">1107163289304147</string>
+</resources>
