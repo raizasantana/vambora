@@ -6,4 +6,46 @@
 
     <!-- Facebook API -->
     <string name="facebook_app_id">1107163289304147</string>
+    <string name="txLoginButton">Conectar via Facebook</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="title_activity_login_fbdia">LoginFBDiaActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="title_activity_login_fb">LoginFBActivity</string>
+    <string name="title_activity_preferencias">Preferências</string>
+
+    <!-- Tela Preferencias -->
+    <string name="pergunta1">Quando você prefere sair?</string>
+    <string name="resposta11">Dia</string>
+    <string name="resposta21">Noite</string>
+    <string name="resposta31">Qualquer hora</string>
+
+    <string name="pergunta2">O que você gosta de fazer?</string>
+    <string name="resposta12">Dançar</string>
+    <string name="resposta22">Paquerar</string>
+    <string name="resposta32">Beber</string>
+    <string name="resposta42">Ar Livre</string>
+    <string name="resposta52">Curtir um visual</string>
+    <string name="resposta62">Conhecer gente legal</string>
+
+
+
+    <string name="large_text">
+        "Material is the metaphor.\n\n"
+
+        "A material metaphor is the unifying theory of a rationalized space and a system of motion."
+        "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
+        "technologically advanced and open to imagination and magic.\n"
+        "Surfaces and edges of the material provide visual cues that are grounded in reality. The "
+        "use of familiar tactile attributes helps users quickly understand affordances. Yet the "
+        "flexibility of the material creates new affordances that supercede those in the physical "
+        "world, without breaking the rules of physics.\n"
+        "The fundamentals of light, surface, and movement are key to conveying how objects move, "
+        "interact, and exist in space and in relation to each other. Realistic lighting shows "
+        "seams, divides space, and indicates moving parts.\n\n"
+    </string>
 </resources>
