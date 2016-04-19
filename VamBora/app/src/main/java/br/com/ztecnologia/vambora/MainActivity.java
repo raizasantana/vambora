@@ -12,10 +12,12 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -33,8 +35,19 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+
+import br.com.ztecnologia.vambora.Util.FacebookAPI;
+import br.com.ztecnologia.vambora.model.Evento;
+import br.com.ztecnologia.vambora.model.FBObjeto;
+import br.com.ztecnologia.vambora.model.Preferencias;
+import br.com.ztecnologia.vambora.model.Usuario;
+import br.com.ztecnologia.vambora.view.PreferenciasActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -42,12 +55,13 @@ public class MainActivity extends AppCompatActivity {
     private LoginButton btLoginFB;
     private CallbackManager callbackManager;
 
-    private Button btTeste;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
     private GoogleApiClient client;
+
+    private Button btTeste;
+
+    private Usuario usuario;
+    private ArrayList<Evento> eventos;
+    private ArrayList<String> likes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,22 +71,6 @@ public class MainActivity extends AppCompatActivity {
 
         //Iniciando o FB
         FacebookSdk.sdkInitialize(this.getApplicationContext());
-
-
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    "br.com.ztecnologia.vambora",
-                    PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d(">>>>>>>>>KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-
-        } catch (NoSuchAlgorithmException e) {
-
-        }
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -88,8 +86,49 @@ public class MainActivity extends AppCompatActivity {
        btLoginFB.setReadPermissions("user_location");
        btLoginFB.setReadPermissions("user_events");
        btLoginFB.setReadPermissions("user_likes");
+       btLoginFB.setReadPermissions("user_about_me");
 
         obtemDadosLogin(btLoginFB);
+
+        btTeste = (Button) findViewById(R.id.button);
+        btTeste.setText("Dados do Usuario");
+        btTeste.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GraphRequest request = GraphRequest.newMeRequest(
+                        AccessToken.getCurrentAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                // Application code
+                                try {
+                                    usuario = new Usuario(Long.valueOf(object.getString("id")), object.getString("name"));
+//                                    usuario.setGenero(object.getString("gender"));
+                                    Intent i = new Intent(MainActivity.this, PreferenciasActivity.class);
+                                    i.putExtra("usuarioID",String.valueOf(usuario.getId()));
+                                    i.putExtra("usuarioNome",usuario.getNome());
+
+                                    startActivity(i);
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "name,birthday,gender,location");
+                request.setParameters(parameters);
+                request.executeAsync();
+
+                likes = new ArrayList<String>();
+                FacebookAPI.getLikes(likes);
+                Log.i("LIKES",likes.toString());
+
+            }
+        });
+
+
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -194,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
             public void onSuccess(LoginResult loginResult) {
                 new GraphRequest(
                         loginResult.getAccessToken(),
-                        "/me/music",
+                        "/me?fields=id,name,birthday,gender,location",
                         null,
                         HttpMethod.GET,
                         new GraphRequest.Callback() {
@@ -217,4 +256,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+
+
 }
+
